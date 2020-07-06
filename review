@@ -1,0 +1,44 @@
+<section id="inventory-reviews">
+                <h2>Customer Reviews</h2>
+                <?php
+                if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+                    $screenName = generateScreenName($_SESSION['clientData']['clientFirstname'], $_SESSION['clientData']['clientLastname']);
+                ?>
+                    <h3>Review the <?php echo $vehicle['invMake'] . " " . $vehicle['invModel'] ?></h3>
+
+
+
+                    <form id="review" class="user-management" action="/phpmotors/reviews/index.php" method="post">
+                        <div>
+                            <label for="screenName">Screen Name</label>
+                            <input type="text" <?php echo "value='$screenName'"  ?> id="screenName" name="screenName" >
+                        </div>
+                        <div>
+                            <label for="reviewText">Review Text</label>
+                            <textarea rows=5 id="reviewText" name="reviewText" required></textarea>
+                        </div>
+                        <div>
+                            <input type="submit" name="submit" id="save-review" value="Submit Review">
+                        </div>
+                        <!-- Add the name - value pairs -->
+                        <input type="hidden" name="action" value="add-review">
+                        <input type="hidden" name="invId" value="<?php echo $invId ?>">
+                        <input type="hidden" name="clientId" value="<?php echo $_SESSION['clientData']['clientId'] ?>">
+                    </form>
+
+
+
+                    <!-- <?php
+                        } else {
+                            echo "<p>You must <a href='/phpmotors/accounts/?action=login'>login</a> to write a review.</p>";
+                        }
+                        $invReviews = getReviewsByInvId($invId);
+                        if ($invReviews) {
+                            $reviews = buildInventoryReviewsList($invReviews);
+                            echo $reviews;
+                        } else {
+                            echo "<p class='italicized-message'>Be the first to write a review.</p>";
+                        }
+                            ?> -->
+            </section>
+                    

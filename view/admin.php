@@ -1,0 +1,73 @@
+<?php 
+    if(!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
+        header('Location: /phpmotors/');
+        exit;
+    }
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin View | PHP Motors</title>
+    <link rel="stylesheet" href="/phpmotors/css/main.css" media="screen">
+   
+</head>
+
+<body>
+    <div class="site-wrapper">
+        <header>
+            <?php include $_SERVER['DOCUMENT_ROOT'].'/phpmotors/common/header.php'; ?>
+        </header>
+        <nav>
+            <?php echo $navList; ?>
+        </nav>
+        <main>
+            <h1>
+                <?php 
+                    echo $_SESSION['clientData']['clientFirstname'] . " " . $_SESSION['clientData']['clientLastname'];
+                ?>
+            </h1>
+            <?php
+                if (isset($_SESSION['message'])) {
+                    $message = $_SESSION['message'];
+                }
+                if (isset($message)) {
+                    echo $message;
+                }
+                unset($_SESSION['message']);
+            ?>
+            <p>You are logged in.</p>
+            <ul>
+                <li><span class="label">First Name:</span> <?php echo $_SESSION['clientData']['clientFirstname'] ?></li>
+                <li><span class="label">Last Name:</span> <?php echo $_SESSION['clientData']['clientLastname'] ?></li>
+                <li><span class="label">Email:</span> <?php echo $_SESSION['clientData']['clientEmail'] ?></li>
+            </ul>
+            <p><a role='button' class='primary btn-link'  href='/phpmotors/accounts/index.php?action=update-account-info'>Update Account Information</a></p>
+            <?php
+                if($_SESSION['clientData']['clientLevel'] > 1) {
+                    echo "
+                        <h2>Manage Inventory</h2>
+                        <p>Use the following link to manage current inventory and vehicle classifications.</p>
+                        <p>
+                            <a role='button' class='primary btn-link'  href='/phpmotors/vehicles/'>Vehicle Management</a>
+                        </p>";
+                }
+                $clientReviews = getReviewsByClientId($_SESSION['clientData']['clientId']);
+                if($clientReviews) {
+                    echo "<h2>Manage Your Product Reviews</h2>";
+                    $reviews = buildClientReviewsList($clientReviews);
+                    echo $reviews;
+                }
+            ?>
+        </main>
+        <footer>
+        <?php
+        include $_SERVER['DOCUMENT_ROOT'] . '/phpmotors/common/footer.php'
+        ?>
+        </footer>
+    </div>
+</body>
+
+</html>
